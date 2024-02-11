@@ -1,10 +1,10 @@
 Zadaniem projektowanego serwisu będzie przechowywanie informacji o użytkowniku. Aby to osiągnąć powinien on zawierać następujące endpointy:
 
-GET /users : zwracający listę zarejestrowanych użytkowników; \n
-GET /users/\<id\> : zwracający wskazanego użytkownika - częściowo implementowany na zajęciach. \n
-POST /users : tworzący użytkownika; \n
-PATCH /users/\<id\> : zmieniający dane użytkownika; \n
-DELETE /users/\<id\> : usuwający użytkownika; \n
+- GET /users : zwracający listę zarejestrowanych użytkowników;
+- GET /users/\<id\> : zwracający wskazanego użytkownika - częściowo implementowany na zajęciach;
+- POST /users : tworzący użytkownika;
+- PATCH /users/\<id\> : zmieniający dane użytkownika;
+- DELETE /users/\<id\> : usuwający użytkownika;
 
 Model użytkownika dodawany w aplikacji powinien być zgodny z następującym JSON:
 ```
