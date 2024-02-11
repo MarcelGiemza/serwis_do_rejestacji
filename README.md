@@ -13,7 +13,6 @@ Model użytkownika dodawany w aplikacji powinien być zgodny z następującym JS
     "lastName": str,
     "birthYear": int,
     "group": str, // jedynymi poprawnymi wartościami są napisy: "user", "premium", "admin"
-   
 }
 ```
 
@@ -25,7 +24,6 @@ Model użytkownika zwracany z aplikacji powinien być zgodny z następującym JS
     "lastName": str,
     "age": int,
     "group": str, // jedynymi poprawnymi wartościami są napisy: "user", "premium", "admin"
-   
 }
 ```
 
