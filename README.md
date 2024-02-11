@@ -7,7 +7,7 @@ PATCH /users/\<id\> : zmieniający dane użytkownika
 DELETE /users/\<id\> : usuwający użytkownika;
 
 Model użytkownika dodawany w aplikacji powinien być zgodny z następującym JSON:
-``
+```
 {
     "firstName": str,
     "lastName": str,
@@ -15,10 +15,10 @@ Model użytkownika dodawany w aplikacji powinien być zgodny z następującym JS
     "group": str, // jedynymi poprawnymi wartościami są napisy: "user", "premium", "admin"
    
 }
-``
+```
 
 Model użytkownika zwracany z aplikacji powinien być zgodny z następującym JSON:
-``
+```
 {
     "id": int,
     "firstName": str,
@@ -27,7 +27,7 @@ Model użytkownika zwracany z aplikacji powinien być zgodny z następującym JS
     "group": str, // jedynymi poprawnymi wartościami są napisy: "user", "premium", "admin"
    
 }
-``
+```
 
 Proszę wykonać serwis webowy w architekturze trójwarstwowej spełniający następujące warunki:
 
