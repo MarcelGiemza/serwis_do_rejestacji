@@ -40,9 +40,17 @@ class ItemAPI(MethodView):
         return {self.name: item["data"]}
 
     def patch(self, id):
-        # if
-
-        user = self._get(id)
+        item = self._get(id)
+        data = request.get_json()
+        if not item["error"] and self.model.validate_patch(data):
+            item["data"].update(data)
+            self.db.update({id: item["data"]})
+            return Response(status=NO_CONTENT)
+        return Response(status=WRONG_REQUEST)
+    
+    def delete(self, id):
+        self.db.pop(id)
+        return Response(status=NO_CONTENT)
 
 
 class GroupAPI(MethodView):
@@ -64,7 +72,7 @@ class _User:
         "properties": {
             "firstName": {"type": "string"},
             "lastName": {"type": "string"},
-            "birthYear": {"type": "intiger"},
+            "birthYear": {"type": "number"},
             "group": {"enum": ["user", "premium", "admin"]},
         },
         "minProperties": 1,
@@ -100,10 +108,16 @@ class _User:
 User = _User()
 
 
+class Ping(MethodView):
+    def get(self):
+        return {"ping": True}
+
+
 user_item_api = ItemAPI.as_view("user-item", users, User, "user")
 user_group_api = GroupAPI.as_view("user-group", users, User, "users")
 app.add_url_rule(f"/users/<int:id>", view_func=user_item_api)
 app.add_url_rule(f"/users/", view_func=user_group_api)
+app.add_url_rule(f"/", view_func=Ping.as_view("ping"))
 
 if __name__ == "__main__":
     app.run("localhost", 8000)
