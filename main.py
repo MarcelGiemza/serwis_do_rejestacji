@@ -47,7 +47,7 @@ class ItemAPI(MethodView):
             self.db.update({id: item["data"]})
             return Response(status=NO_CONTENT)
         return Response(status=WRONG_REQUEST)
-    
+
     def delete(self, id):
         self.db.pop(id)
         return Response(status=NO_CONTENT)
@@ -60,7 +60,21 @@ class GroupAPI(MethodView):
         self.name = name
 
     def get(self):
-        return {"error": None, "data": list(map(lambda user: merge_dicts({"id": user[0]}, user[1]), list(users.items())))}
+        return {"data": list(map(lambda user: merge_dicts({"id": user[0]}, user[1]), list(users.items())))}
+    
+    def _find_lowest_unused_id(self):
+        keys = list(self.db.keys())
+        for i in range(1, max(keys)+2):
+            if keys.count(i) == 0:
+                return i
+
+    def post(self):
+        data = request.get_json()
+        if self.model.validate_post(data):
+            id = self._find_lowest_unused_id()
+            self.db.update({id: data})
+            return Response(status=CREATED)
+        return Response(status=WRONG_REQUEST)
 
 
 class _User:
@@ -83,7 +97,7 @@ class _User:
         "properties": {
             "firstName": {"type": "string"},
             "lastName": {"type": "string"},
-            "birthYear": {"type": "intiger"},
+            "birthYear": {"type": "number"},
             "group": {"enum": ["user", "premium", "admin"]},
         },
         "required": ["firstName", "lastName", "birthYear", "group"],
