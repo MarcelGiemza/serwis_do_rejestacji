@@ -126,12 +126,14 @@ class Ping(MethodView):
     def get(self):
         return {"ping": True}
 
+def create_api(name, name_plural, db, model):
+    item_api = ItemAPI.as_view(f"{name}-item", db, model, name)
+    group_api = GroupAPI.as_view(f"{name}-group", db, model, name_plural)
+    app.add_url_rule(f"/{name_plural}/<int:id>", view_func=item_api)
+    app.add_url_rule(f"/{name_plural}/", view_func=group_api)
 
-user_item_api = ItemAPI.as_view("user-item", users, User, "user")
-user_group_api = GroupAPI.as_view("user-group", users, User, "users")
-app.add_url_rule(f"/users/<int:id>", view_func=user_item_api)
-app.add_url_rule(f"/users/", view_func=user_group_api)
 app.add_url_rule(f"/", view_func=Ping.as_view("ping"))
 
 if __name__ == "__main__":
+    create_api("user", "users", users, User)
     app.run("localhost", 8000)
