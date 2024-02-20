@@ -14,13 +14,24 @@ def test_ping():
 def test_post():
     client = app.test_client()
     actual = client.post("/users/",
-                         json={"firstName": "test", "lastName": "test", "birthYear": 2000, "group": "user"})
+                         json={"firstName": "test", "lastName": "test",
+                               "birthYear": 2000, "group": "user"}
+                         )
     assert actual.status_code == CREATED
 
 
-def test_post_wrong():
+def test_post_not_enought_data():
     client = app.test_client()
-    actual = client.post("/users/", json={"name": "test"})
+    actual = client.post("/users/", json={"forstName": "test"})
+    assert actual.status_code == WRONG_REQUEST
+
+
+def test_post_not_aditional_data():
+    client = app.test_client()
+    actual = client.post("/users/",
+                         json={"firstName": "test", "lastName": "test",
+                               "birthYear": 2000, "group": "user", "hello": "world"}
+                         )
     assert actual.status_code == WRONG_REQUEST
 
 
@@ -64,6 +75,14 @@ def test_patch_group_admin():
     client = app.test_client()
     actual = client.patch("/users/1", json={"group": "admin"})
     assert actual.status_code == NO_CONTENT
+
+
+def test_patch_aditional_data():
+    client = app.test_client()
+    actual = client.patch(
+        "/users/1", json={"lastName": "admin", "someProperty": "this should not be here"}
+    )
+    assert actual.status_code == WRONG_REQUEST
 
 
 def test_patch_no_user():
