@@ -49,7 +49,10 @@ class ItemAPI(MethodView):
         return Response(status=WRONG_REQUEST)
 
     def delete(self, id):
-        self.db.pop(id)
+        try: 
+            self.db.pop(id)
+        except KeyError:
+            pass
         return Response(status=NO_CONTENT)
 
 
@@ -61,7 +64,7 @@ class GroupAPI(MethodView):
 
     def get(self):
         return {"data": list(map(lambda user: merge_dicts({"id": user[0]}, user[1]), list(users.items())))}
-    
+
     def _find_lowest_unused_id(self):
         keys = list(self.db.keys())
         for i in range(1, max(keys)+2):
@@ -126,11 +129,17 @@ class Ping(MethodView):
     def get(self):
         return {"ping": True}
 
+
 def create_api(name, name_plural, db, model):
     item_api = ItemAPI.as_view(f"{name}-item", db, model, name)
     group_api = GroupAPI.as_view(f"{name}-group", db, model, name_plural)
     app.add_url_rule(f"/{name_plural}/<int:id>", view_func=item_api)
     app.add_url_rule(f"/{name_plural}/", view_func=group_api)
+# item_api = ItemAPI.as_view(f"user-item", users, User, "user")
+# group_api = GroupAPI.as_view(f"user-group", users, User, "users")
+# app.add_url_rule(f"/users/<int:id>", view_func=item_api)
+# app.add_url_rule(f"/users/", view_func=group_api)
+
 
 app.add_url_rule(f"/", view_func=Ping.as_view("ping"))
 
