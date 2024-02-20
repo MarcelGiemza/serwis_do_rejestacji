@@ -1,3 +1,8 @@
+Instalacja wymagań:
+"""
+pip install flask pytest jsonschema
+"""
+
 Zadaniem projektowanego serwisu będzie przechowywanie informacji o użytkowniku. Aby to osiągnąć powinien on zawierać następujące endpointy:
 
 - GET /users : zwracający listę zarejestrowanych użytkowników;
