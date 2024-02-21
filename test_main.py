@@ -1,8 +1,4 @@
-from main import CREATED, NO_CONTENT, WRONG_REQUEST, OK, NOT_FOUND, app, create_api, User
-create_api("user", "users", {
-    1: {"firstName": "test", "lastName": "test", "birthYear": 2000, "group": "user"},
-    2: {"firstName": "test2", "lastName": "test2", "birthYear": 1500, "group": "premium"}
-}, User)
+from main import CREATED, NO_CONTENT, WRONG_REQUEST, OK, app
 
 
 def test_ping():
@@ -13,7 +9,7 @@ def test_ping():
 
 def test_post():
     client = app.test_client()
-    actual = client.post("/users/",
+    actual = client.post("/users",
                          json={"firstName": "test", "lastName": "test",
                                "birthYear": 2000, "group": "user"}
                          )
@@ -22,13 +18,13 @@ def test_post():
 
 def test_post_not_enought_data():
     client = app.test_client()
-    actual = client.post("/users/", json={"forstName": "test"})
+    actual = client.post("/users", json={"forstName": "test"})
     assert actual.status_code == WRONG_REQUEST
 
 
 def test_post_not_aditional_data():
     client = app.test_client()
-    actual = client.post("/users/",
+    actual = client.post("/users",
                          json={"firstName": "test", "lastName": "test",
                                "birthYear": 2000, "group": "user", "hello": "world"}
                          )
@@ -87,7 +83,7 @@ def test_patch_aditional_data():
 
 def test_patch_no_user():
     client = app.test_client()
-    actual = client.patch("/users/10", json={"firstName": "Marcel"})
+    actual = client.patch("/users/1000", json={"firstName": "Marcel"})
     assert actual.status_code == WRONG_REQUEST
 
 
@@ -105,5 +101,5 @@ def test_delete():
 
 def test_delete_no_user():
     client = app.test_client()
-    actual = client.delete("/users/10")
+    actual = client.delete("/users/1000")
     assert actual.status_code == NO_CONTENT
