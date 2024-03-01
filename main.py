@@ -1,8 +1,9 @@
 from flask import Flask, request, Response
 from controller import UserController
 from STATUS_CODES import *
+from database import Users
 
-user_controller = UserController()
+user_controller = UserController(Users)
 app = Flask(__name__)
 
 
